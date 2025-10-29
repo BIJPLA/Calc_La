@@ -19,15 +19,6 @@ async function geocode(address) {
 const DMT = {
   "CAVA": { "Norte": 1.15, "Oeste": 1.15, "Leste": 1.15, "Sul": 1.15 },
   "Empreiterra": { "Norte": 1.2, "Oeste": 1.2, "Leste": 1.25, "Sul": 1.2 },
-<<<<<<< HEAD
-  "Essencis": { "Norte": 1.3, "Oeste": 1.25, "Leste": 1.20, "Sul": 1.25 },
-  "Imbulix": { "Norte": 1.2, "Oeste": 1.15, "Leste": 1.25, "Sul": 1.15 },
-  "Itaquareia": { "Norte": 1.1, "Oeste": 1.1, "Leste": 1.1, "Sul": 1.1 },
-  "Olifar": { "Norte": 1.6, "Oeste": 1.3, "Leste": 1.6, "Sul": 1.4 },
-  "Parmv":{"Norte": 1.25, "Oeste":1.25, "Leste":1.25, "Sul": 1.30},
-  "Temari": { "Norte": 1.2, "Oeste": 1.2, "Leste": 1.2, "Sul": 1.2 },
-  "Mombaça": { "Norte": 1.25, "Oeste": 1.25, "Leste": 1.25, "Sul": 1.25 },
-=======
   "Essencis": { "Norte": 1.35, "Oeste": 1.3, "Leste": 1.25, "Sul": 1.3 },
   "Imbulix": { "Norte": 1.2, "Oeste": 1.15, "Leste": 1.25, "Sul": 1.15 },
   "Itaquareia": { "Norte": 1.1, "Oeste": 1.1, "Leste": 1.1, "Sul": 1.1 },
@@ -35,23 +26,16 @@ const DMT = {
   "UVR Grajau": { "Norte": 1.6, "Oeste": 1.5, "Leste": 1.6, "Sul": 1.5 },
   "Temari": { "Norte": 1.2, "Oeste": 1.2, "Leste": 1.2, "Sul": 1.2 },
   "Mombaça": { "Norte": 1.2, "Oeste": 1.2, "Leste": 1.2, "Sul": 1.2 },
->>>>>>> aee32f7 (Nova_Calc)
   "HSH": { "Norte": 1.2, "Oeste": 1.2, "Leste": 1.25, "Sul": 1.2 },
   "Carmosina": { "Norte": 1.35, "Oeste": 1.3, "Leste": 1.35, "Sul": 1.3 },
   "Nova Ambiental": { "Norte": 1.25, "Oeste": 1.2, "Leste": 1.25, "Sul": 1.2 },
   "CDR Pedreira": { "Norte": 1.3, "Oeste": 1.3, "Leste": 1.3, "Sul": 1.5 },
   "Lara": { "Norte": 1.35, "Oeste": 1.35, "Leste": 1.35, "Sul": 1.35 },
-<<<<<<< HEAD
-  "JS dos Santos": { "Norte": 1.15, "Oeste": 1.15, "Leste": 1.15, "Sul": 1.15 },
-  "Geoincorp": { "Norte": 1.25, "Oeste": 1.2, "Leste": 1.25, "Sul": 1.2 },
-  "Sanca":{"Norte": 1.25, "Oeste":1.25, "Leste":1.25, "Sul": 1.30}
-=======
   "JS dos Santos": { "Norte": 1.2, "Oeste": 1.2, "Leste": 1.2, "Sul": 1.2 },
   "Geoincorp": { "Norte": 1.25, "Oeste": 1.2, "Leste": 1.25, "Sul": 1.2 },
   "Sanca":{"Norte": 1.25, "Oeste":1.25, "Leste":1.25, "Sul": 1.30},
   "Parmv":{"Norte": 1.25, "Oeste":1.25, "Leste":1.25, "Sul": 1.30},
 
->>>>>>> aee32f7 (Nova_Calc)
 };
 
 function exportarXLSX() {
@@ -95,10 +79,7 @@ async function calcularRotas() {
   { nome: "Geoincorp", coordenadas: [-46.931481, -23.617269], preco: 0, status: "Ativo"  },
   {nome: "Sanca", coordenadas: [-46.59873, -23.52481], preco: 0, status: "Ativo"}
 ];
-<<<<<<< HEAD
-=======
 
->>>>>>> aee32f7 (Nova_Calc)
 
   const geocodificar = async endereco => {
     const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(endereco + ', Brasil')}`);
@@ -221,28 +202,6 @@ function ordenarTabela(colIndex) {
     tabela.tBodies[0].appendChild(linha);
   }
 
-<<<<<<< HEAD
-}
-
-// NOVA FUNÇÃO EXPORTAR DEFINITIVA
-
-let destinosCalculados = []; // Global para armazenar os dados calculados
-
-function exportarXLSX() {
-  const rows = document.querySelectorAll('#tabelaResultados tbody tr');
-  const wb = XLSX.utils.book_new();
-  const data = [['Destino', 'Endereço', 'Status', 'Distância', 'Duração', 'Preço', 'Rota']];
-  rows.forEach(row => {
-    const cols = Array.from(row.querySelectorAll('td')).map(cell => cell.innerText);
-    data.push(cols);
-  });
-  const ws = XLSX.utils.aoa_to_sheet(data);
-  XLSX.utils.book_append_sheet(wb, ws, 'Rotas');
-
-  const titulo = document.getElementById("tituloResultado").innerText.replace(/\s+/g, '_');
-  XLSX.writeFile(wb, `${titulo}.xlsx`);
-=======
->>>>>>> aee32f7 (Nova_Calc)
 }
 
 // NOVA FUNÇÃO EXPORTAR DEFINITIVA
