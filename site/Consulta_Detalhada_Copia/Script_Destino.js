@@ -1,72 +1,35 @@
-async function geocode(address) {
-    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=br&bounded=1&viewbox=-47.0,-23.3,-46.3,-23.9&q=${encodeURIComponent(address)}`;
-    const response = await fetch(url, { headers: { 'User-Agent': 'ConsultaSimples' } });
-    const data = await response.json();
-
-    if (data.length === 0) throw new Error("Endereço não encontrado");
-
-    // Ordena por importance
-    data.sort((a, b) => b.importance - a.importance);
-
-    const result = data[0];
-    if (!result || !result.lat || !result.lon) throw new Error("Resposta inválida da geocodificação");
-
-    console.log("Endereço retornado:", result.display_name);
-
-    return [parseFloat(result.lon), parseFloat(result.lat)];
-}
-
 const DMT = {
   "CAVA": { "Norte": 1.15, "Oeste": 1.15, "Leste": 1.15, "Sul": 1.15 },
   "Empreiterra": { "Norte": 1.2, "Oeste": 1.2, "Leste": 1.25, "Sul": 1.2 },
-<<<<<<< HEAD
-  "Essencis": { "Norte": 1.3, "Oeste": 1.25, "Leste": 1.20, "Sul": 1.25 },
-  "Imbulix": { "Norte": 1.2, "Oeste": 1.15, "Leste": 1.25, "Sul": 1.15 },
-  "Itaquareia": { "Norte": 1.1, "Oeste": 1.1, "Leste": 1.1, "Sul": 1.1 },
-  "Olifar": { "Norte": 1.6, "Oeste": 1.3, "Leste": 1.6, "Sul": 1.4 },
-  "Parmv":{"Norte": 1.25, "Oeste":1.25, "Leste":1.25, "Sul": 1.30},
-  "Temari": { "Norte": 1.2, "Oeste": 1.2, "Leste": 1.2, "Sul": 1.2 },
-  "Mombaça": { "Norte": 1.25, "Oeste": 1.25, "Leste": 1.25, "Sul": 1.25 },
-=======
   "Essencis": { "Norte": 1.35, "Oeste": 1.3, "Leste": 1.25, "Sul": 1.3 },
-  "Imbulix": { "Norte": 1.2, "Oeste": 1.15, "Leste": 1.25, "Sul": 1.15 },
+  "Imbulix": { "Norte": 1.2, "Oeste": 1.2, "Leste": 1.25, "Sul": 1.2 },
   "Itaquareia": { "Norte": 1.1, "Oeste": 1.1, "Leste": 1.1, "Sul": 1.1 },
   "Olifar": { "Norte": 1.6, "Oeste": 1.3, "Leste": 1.6, "Sul": 1.3 },
   "UVR Grajau": { "Norte": 1.6, "Oeste": 1.5, "Leste": 1.6, "Sul": 1.5 },
-  "Temari": { "Norte": 1.2, "Oeste": 1.2, "Leste": 1.2, "Sul": 1.2 },
+  "Temari": { "Norte": 1.2, "Oeste": 1.2, "Leste": 1.25, "Sul": 1.2 },
   "Mombaça": { "Norte": 1.2, "Oeste": 1.2, "Leste": 1.2, "Sul": 1.2 },
->>>>>>> aee32f7 (Nova_Calc)
   "HSH": { "Norte": 1.2, "Oeste": 1.2, "Leste": 1.25, "Sul": 1.2 },
   "Carmosina": { "Norte": 1.35, "Oeste": 1.3, "Leste": 1.35, "Sul": 1.3 },
   "Nova Ambiental": { "Norte": 1.25, "Oeste": 1.2, "Leste": 1.25, "Sul": 1.2 },
   "CDR Pedreira": { "Norte": 1.3, "Oeste": 1.3, "Leste": 1.3, "Sul": 1.5 },
-  "Lara": { "Norte": 1.35, "Oeste": 1.35, "Leste": 1.35, "Sul": 1.35 },
-<<<<<<< HEAD
-  "JS dos Santos": { "Norte": 1.15, "Oeste": 1.15, "Leste": 1.15, "Sul": 1.15 },
-  "Geoincorp": { "Norte": 1.25, "Oeste": 1.2, "Leste": 1.25, "Sul": 1.2 },
-  "Sanca":{"Norte": 1.25, "Oeste":1.25, "Leste":1.25, "Sul": 1.30}
-=======
-  "JS dos Santos": { "Norte": 1.2, "Oeste": 1.2, "Leste": 1.2, "Sul": 1.2 },
-  "Geoincorp": { "Norte": 1.25, "Oeste": 1.2, "Leste": 1.25, "Sul": 1.2 },
-  "Sanca":{"Norte": 1.25, "Oeste":1.25, "Leste":1.25, "Sul": 1.30},
-  "Parmv":{"Norte": 1.25, "Oeste":1.25, "Leste":1.25, "Sul": 1.30},
-
->>>>>>> aee32f7 (Nova_Calc)
+  "Lara": { "Norte": 1.35, "Oeste": 1.35, "Leste": 1.35, "Sul": 1.35 }
 };
 
 function exportarXLSX() {
   const rows = document.querySelectorAll('#tabelaResultados tbody tr');
   const wb = XLSX.utils.book_new();
-  const data = [['Destino', 'Endereço', 'Status', 'Distância', 'Duração', 'Preço', 'Rota']];
+  const data = [['Destino', 'Endereço', 'Distância', 'Duração', 'Preço', 'Rota']];
   rows.forEach(row => {
     const cols = Array.from(row.querySelectorAll('td')).map(cell => cell.innerText);
     data.push(cols);
   });
   const ws = XLSX.utils.aoa_to_sheet(data);
   XLSX.utils.book_append_sheet(wb, ws, 'Rotas');
+  
+  const titulo = document.getElementById("tituloResultado").innerText.trim();
+  const nomeArquivo = titulo ? `${titulo}.xlsx` : "rotas.xlsx";
+  XLSX.writeFile(wb, nomeArquivo);
 
-  const titulo = document.getElementById("tituloResultado").innerText.replace(/\s+/g, '_');
-  XLSX.writeFile(wb, `${titulo}.xlsx`);
 }
 
 async function calcularRotas() {
@@ -77,28 +40,21 @@ async function calcularRotas() {
   }
 
   const destinos = [
-  { nome: "CAVA", coordenadas: [-46.8120277777778, -23.5148333333333], preco: 0, status: "Ativo" },
-  { nome: "Empreiterra", coordenadas: [-46.5585531, -23.4747267], preco: 0, status: "Ativo"  },
-  { nome: "Imbulix", coordenadas: [-46.841689, -23.662857], preco: 0, status: "Ativo"  },
-  { nome: "Itaquareia", coordenadas: [-46.343509, -23.473241], preco: 0, status: "Ativo"  },
-  {nome: "Parmv", coordenadas: [-46.535480, -23.483620], preco: 0, status: "Ativo"},
-  { nome: "Temari", coordenadas: [-46.4647502, -23.4148032], preco: 0, status: "Inativo"  },
-  { nome: "Nova Ambiental", coordenadas: [-46.9783503, -23.5264676], preco: 0, status: "Ativo"  },
-  { nome: "CDR Pedreira", coordenadas: [-46.5629714, -23.4126744], preco: 0, status: "Ativo"  },
-  { nome: "Essencis", coordenadas: [-46.786638, -23.356849], preco: 0, status: "Ativo"  },
-  { nome: "Olifar", coordenadas: [ -46.674365, -23.767057], preco: 0, status: "Ativo"  },
-  { nome: "Lara", coordenadas: [-46.473925, -23.704714], preco: 0, status: "Ativo"  },
-  { nome: "Carmosina", coordenadas: [-46.428443, -23.588269], preco: 0, status: "Inativa"  },
-  { nome: "Mombaça", coordenadas: [-46.849432, -23.747264], preco: 0, status: "Ativo"  },
-  { nome: "HSH", coordenadas: [-46.399498, -23.481151], preco: 0, status: "Ativo"  },
-  { nome: "JS dos Santos", coordenadas: [-46.770521, -23.438445], preco: 0, status: "Ativo"  },
-  { nome: "Geoincorp", coordenadas: [-46.931481, -23.617269], preco: 0, status: "Ativo"  },
-  {nome: "Sanca", coordenadas: [-46.59873, -23.52481], preco: 0, status: "Ativo"}
+  { nome: "CAVA", coordenadas: [-46.8120277777778, -23.5148333333333], preco: 0 },
+  { nome: "Empreiterra", coordenadas: [-46.5585531, -23.4747267], preco: 0 },
+  { nome: "Imbulix", coordenadas: [-46.8441879, -23.6581408], preco: 0 },
+  { nome: "Itaquareia", coordenadas: [-46.343509, -23.473241], preco: 0 },
+  { nome: "UVR Grajau", coordenadas: [-46.6838059, -23.7948386], preco: 0 },
+  { nome: "Temari", coordenadas: [-46.4647502, -23.4148032], preco: 0 },
+  { nome: "Nova Ambiental", coordenadas: [-46.9783503, -23.5264676], preco: 0 },
+  { nome: "CDR Pedreira", coordenadas: [-46.5629714, -23.4126744], preco: 0 },
+  { nome: "Essencis", coordenadas: [-46.786638, -23.356849], preco: 0 },
+  { nome: "Olifar", coordenadas: [-46.4029000, -23.4559000], preco: 0 },
+  { nome: "Lara", coordenadas: [-46.282800, -23.421700], preco: 0 },
+  { nome: "Carmosina", coordenadas: [-46.428443, -23.588269], preco: 0 },
+  { nome: "Mombaça", coordenadas: [-46.838467, -23.762414], preco: 0 },
+  { nome: "HSH", coordenadas: [-46.399498, -23.481151], preco: 0 }
 ];
-<<<<<<< HEAD
-=======
-
->>>>>>> aee32f7 (Nova_Calc)
 
   const geocodificar = async endereco => {
     const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(endereco + ', Brasil')}`);
@@ -113,11 +69,7 @@ async function calcularRotas() {
   const tabelaBody = document.querySelector('#tabelaResultados tbody');
   tabelaBody.innerHTML = "";
 
-  if (window.mapInstance) {
-        window.mapInstance.remove();
-    }
-    window.mapInstance = L.map('map').setView([origemCoord[1], origemCoord[0]], 10);
-    const map = window.mapInstance;
+  const map = L.map('map').setView([origemCoord[1], origemCoord[0]], 10);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
@@ -149,7 +101,7 @@ async function calcularRotas() {
       const rotaURL = `https://www.google.com/maps/dir/${origemCoord[1]},${origemCoord[0]}/${destinoCoord[1]},${destinoCoord[0]}`;
 
       
-const linha = `<tr><td>${destino.nome}</td><td>${destino.status}</td><td>${distanciaKm.toFixed(2)} km</td><td>${Math.round(duracaoMin)} min</td><td>${dmtBase.toFixed(2)}</td><td>R$ ${preco.toFixed(2)}</td><td>R$ ${((distanciaKm + 3) * dmtBase).toFixed(2)}</td><td>R$ ${((distanciaKm + 5) * dmtBase).toFixed(2)}</td><td><a href="${rotaURL}" target="_blank">Ver rota</a></td></tr>`;
+const linha = `<tr><td>${destino.nome}</td><td>${distanciaKm.toFixed(2)} km</td><td>${Math.round(duracaoMin)} min</td><td>${dmtBase.toFixed(2)}</td><td>R$ ${preco.toFixed(2)}</td><td>R$ ${((distanciaKm + 3) * dmtBase).toFixed(2)}</td><td>R$ ${((distanciaKm + 5) * dmtBase).toFixed(2)}</td><td><a href="${rotaURL}" target="_blank">Ver rota</a></td></tr>`;
 destinosCalculados.push({
   nomeObra: document.getElementById("obra").value.trim(),
   enderecoOrigem: document.getElementById("end1").value.trim(),
@@ -221,7 +173,6 @@ function ordenarTabela(colIndex) {
     tabela.tBodies[0].appendChild(linha);
   }
 
-<<<<<<< HEAD
 }
 
 // NOVA FUNÇÃO EXPORTAR DEFINITIVA
@@ -229,37 +180,27 @@ function ordenarTabela(colIndex) {
 let destinosCalculados = []; // Global para armazenar os dados calculados
 
 function exportarXLSX() {
-  const rows = document.querySelectorAll('#tabelaResultados tbody tr');
   const wb = XLSX.utils.book_new();
-  const data = [['Destino', 'Endereço', 'Status', 'Distância', 'Duração', 'Preço', 'Rota']];
-  rows.forEach(row => {
-    const cols = Array.from(row.querySelectorAll('td')).map(cell => cell.innerText);
-    data.push(cols);
+  const data = [['Nome da Obra', 'Endereço da Origem', 'Destino', 'Endereço de destino', 'Distância', 'DMT', 'Preço', '3 Km', '5 Km', 'Rota']];
+
+  destinosCalculados.forEach(item => {
+    data.push([
+      item.nomeObra,
+      item.enderecoOrigem,
+      item.destino,
+      item.enderecoDestino,
+      item.distancia,
+      item.dmt,
+      item.preco,
+      item.tresKm,
+      item.cincoKm,
+      item.rota
+    ]);
   });
+
   const ws = XLSX.utils.aoa_to_sheet(data);
   XLSX.utils.book_append_sheet(wb, ws, 'Rotas');
-
-  const titulo = document.getElementById("tituloResultado").innerText.replace(/\s+/g, '_');
-  XLSX.writeFile(wb, `${titulo}.xlsx`);
-=======
->>>>>>> aee32f7 (Nova_Calc)
-}
-
-// NOVA FUNÇÃO EXPORTAR DEFINITIVA
-
-let destinosCalculados = []; // Global para armazenar os dados calculados
-
-function exportarXLSX() {
-  const rows = document.querySelectorAll('#tabelaResultados tbody tr');
-  const wb = XLSX.utils.book_new();
-  const data = [['Destino', 'Endereço', 'Status', 'Distância', 'Duração', 'Preço', 'Rota']];
-  rows.forEach(row => {
-    const cols = Array.from(row.querySelectorAll('td')).map(cell => cell.innerText);
-    data.push(cols);
-  });
-  const ws = XLSX.utils.aoa_to_sheet(data);
-  XLSX.utils.book_append_sheet(wb, ws, 'Rotas');
-
-  const titulo = document.getElementById("tituloResultado").innerText.replace(/\s+/g, '_');
-  XLSX.writeFile(wb, `${titulo}.xlsx`);
+  const titulo = document.getElementById("tituloResultado").innerText.trim();
+  const nomeArquivo = titulo ? `${titulo}.xlsx` : "rotas.xlsx";
+  XLSX.writeFile(wb, nomeArquivo);
 }
